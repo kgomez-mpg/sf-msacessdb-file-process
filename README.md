@@ -5,7 +5,7 @@ Dated : Apr-2022
 
 ## Overview
 
-[Blog: ]()
+[Medium: Processing MS-Access database files natively in Snowflake](https://medium.com/@venkatesh-sekar-56341/processing-ms-access-database-files-natively-in-snowflake-f5a21df12597)
 
 In my various engagements, Microsoft-Access databases (MDB/ACCDB) files are a common occurrence, apart from CSV, EXCEL, and PDFs. MS-Access is one of that well-loved software, which has been long used in the industry across various teams. It starts as a goto application for a quick application with forms, reports, and a database to satisfy a small team, and pretty soon it gets widely used. Copied, circulated around and multiple versions of the same application exist in the enterprise. 
 
