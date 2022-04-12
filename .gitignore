@@ -21,3 +21,14 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+####################
+# Custom
+
+#ignore 
+target/
+temp/
+**/.DS_Store
+
+# Optionally not ignore
+!*/snowpark_ccrawl_news-0.1-jar-with-dependencies.jar
