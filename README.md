@@ -33,7 +33,7 @@ The source code is present here : [Github: sf-msacessdb-file-process](https://gi
 
 Snowflake introduced the ability to read files from the stage (internal & external) and return records using [Java UDTF](https://docs.snowflake.com/en/developer-guide/udf/java/udf-java-tabular-functions.html). By adopting this approach, we could write a function that parses the MSAccess files from a stage all running inside Snowflake.
 
-I have demonstrated this functionality as part of my earlier blog too [Processing WebArchive(WARC) files natively in Snowflake](https://medium.com/me/stats/post/fd973217dd96). 
+I have demonstrated this functionality as part of my earlier blog too [Processing WebArchive(WARC) files natively in Snowflake](https://medium.com/snowflake/processing-webarchive-warc-files-natively-in-snowflake-fd973217dd96). 
 
 ### Parsing MS-Access files
 
