@@ -39,26 +39,32 @@ public class FetchTableRecords
     private List<JDBCResultSetRecord> fetch_table(String p_access_file, String p_table) 
         throws Exception {
         List<JDBCResultSetRecord> records = new ArrayList<>();
-
-        //TODO: pass username/password to access the file
-        Connection dbconn = getDBConnection(p_access_file,null, null);
-
         logger.info(String.format("Retreive all records from table %s ....", p_table));
         String sql_stmt = String.format("select * from %s", p_table);
-        try (ResultSet rs = dbconn.createStatement().executeQuery(sql_stmt)) {
-            while (rs.next()) {
-                
-                JSONArray jArray = ResultSetToJsonMapper.mapResultSet(rs);
+        RowSetFactory factory = RowSetProvider.newFactory();
+        // CachedRowSet doesn't require active db connection unlike RowSet
+        CachedRowSet cachedRowSet = factory.createCachedRowSet();
+        try{
+            //TODO: pass username/password to access the file
+            Connection dbconn = getDBConnection(p_access_file,null,null);
+            ResultSet rs = dbconn.createStatement().executeQuery(sql_stmt);
+            cachedRowSet.populate(rs);
+            dbconn.close();
 
+            while(cachedRowSet.next()){
+                JSONArray jArray = ResultSetToJsonMapper.mapResultSet(cachedRowSet);
                 jArray.forEach((r) -> {
-                    JDBCResultSetRecord rec = 
+                    JDBCResultSetRecord rec =
                         new JDBCResultSetRecord(p_access_file ,p_table
-                            ,r.toString());
-                    records.add(rec);
+                                ,r.toString());
+                        records.add(rec);
                 });
             }
-
         }
+        catch(Exception e){
+            logger.info(String.format("Exception thrown: %s", e.toString()));
+        }
+        
         return records;
     }
 
