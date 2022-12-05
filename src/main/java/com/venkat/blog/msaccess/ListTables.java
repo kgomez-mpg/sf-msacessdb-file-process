@@ -38,15 +38,19 @@ public class ListTables
     private List<JDBCResultSetRecord> list_tables(String p_access_file) 
         throws Exception {
         List<JDBCResultSetRecord> records = new ArrayList<>();
-
-        //TODO : pass username/password to access the file
-        Connection dbconn = getDBConnection(p_access_file,null, null);
-
         logger.info("Fetching list of tables ...");
-        try (ResultSet rs = dbconn.getMetaData().getTables(null, null, "%", null)) {
-            while (rs.next()) {
-                
-                JSONArray jArray = ResultSetToJsonMapper.mapResultSet(rs);
+        RowSetFactory factory = RowSetProvider.newFactory();
+        CachedRowSet cachedRowSet = factory.createCachedRowSet();
+        try{
+            //TODO : pass username/password to access the file
+            Connection dbconn = getDBConnection(p_access_file,null, null);
+            logger.info("Fetching list of tables ...");
+            ResultSet rs = dbconn.getMetaData().getTables(null,null,"%",null);
+            cachedRowSet.populate(rs);
+            dbconn.close();
+
+            while(cachedRowSet.next()){
+                JSONArray jArray = ResultSetToJsonMapper.mapResultSet(cachedRowSet);
 
                 jArray.forEach((r) -> {
                     JDBCResultSetRecord rec = 
@@ -55,7 +59,9 @@ public class ListTables
                     records.add(rec);
                 });
             }
-
+        }
+        catch(Exception e){
+            logger.info(String.format("Exception thrown: %s", e.toString()));
         }
         return records;
     }
