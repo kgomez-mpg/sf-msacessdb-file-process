@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
+import javax.sql.rowset.CachedRowSet;
+import javax.sql.rowset.RowSetFactory;
+import javax.sql.rowset.RowSetProvider;
+
 import org.json.JSONArray;
 
 /**
@@ -50,7 +54,7 @@ public class FetchTableRecords
             ResultSet rs = dbconn.createStatement().executeQuery(sql_stmt);
             cachedRowSet.populate(rs);
             dbconn.close();
-
+            rs.close();
             while(cachedRowSet.next()){
                 JSONArray jArray = ResultSetToJsonMapper.mapResultSet(cachedRowSet);
                 jArray.forEach((r) -> {
@@ -64,7 +68,10 @@ public class FetchTableRecords
         catch(Exception e){
             logger.info(String.format("Exception thrown: %s", e.toString()));
         }
-        
+        finally{
+            cachedRowSet.release();
+            cachedRowSet.close();
+        }
         return records;
     }
 
